@@ -1,4 +1,4 @@
-/* Mein Tag in der Stadt — interfaz. v1.0.0 */
+/* Mein Tag in der Stadt — interfaz. v1.0.1 */
 (function () {
   'use strict';
   var D = window.RELATO_DATA, B = window.RELATO_BANK, E = window.RELATO_ENGINE, SP = window.RelatoSpeech;
@@ -79,7 +79,7 @@
   function sel() { var s = [].slice.call(document.querySelectorAll('#topics input:checked')).map(function (i) { return i.value; }); return s.length ? s : E.TOPICS.slice(); }
   function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
   function begin(topics, isChal) {
-    score = 0; streak = 0; done = 0; missed = []; chal = isChal;
+    score = 0; streak = 0; done = 0; missed = []; chal = isChal; finished = false;
     picker = E.makePicker(E.pool(B.items, topics, isChal));
     $('sc').textContent = 0; $('st').textContent = 0; show('play'); stopTimer();
     $('bHelp').classList.toggle('hid', isChal);
@@ -109,9 +109,9 @@
     $('pHelp').classList.add('hid'); $('pHelp').textContent = '🆘 ' + (cur.help || '');
     $('bHelp').textContent = '🆘 Ayuda';
     if (cur.kind === 'orden') return drawOrd();
-    var short = cur.o.every(function (o) { return o.length <= 8; });
-    $('opts').className = cur.stack ? 'stack' : (short ? (cur.o.length === 4 ? 'two' : 'three') : '');
-    E.shuffle(cur.o).forEach(function (o) {
+    var shown = E.optionsFor(cur), short = cur.o.every(function (o) { return o.length <= 8; });
+    $('opts').className = cur.stack ? 'stack' : (short ? (shown.length === 4 ? 'two' : 'three') : '');
+    shown.forEach(function (o) {
       var b = document.createElement('button'); b.className = 'btn opt'; b.textContent = o; b.lang = 'de'; b.dataset.v = o;
       b.onclick = function () { answer(o, b); }; $('opts').appendChild(b);
     });
@@ -166,7 +166,10 @@
     if (q.kind === 'orden') return '<span lang="de">' + esc(q.type === 'story' ? q.a.join(' ') : q.a.join(' ') + '.') + '</span>';
     return '<span lang="de">' + esc(q.de ? q.de.replace('___', q.a) : q.a) + '</span>';
   }
+  /* v1.0.1 (N7): finish() es idempotente: una segunda llamada (temporizador + Terminar) no sobrescribe el mensaje de marca verde o récord */
+  var finished = true;
   function finish() {
+    if (finished) return; finished = true;
     stopTimer(); stopSpeak(); var wasChal = chal; chal = false; var t = '¡Buen trabajo, ' + window.NM() + '! 🌟';
     if (wasChal) {
       var res = E.applyChallenge(ST, chalT, score, done);

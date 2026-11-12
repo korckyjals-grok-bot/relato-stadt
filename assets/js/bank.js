@@ -1,4 +1,4 @@
-/* Mein Tag in der Stadt — banco de práctica (determinista). v1.0.0
+/* Mein Tag in der Stadt — banco de práctica (determinista). v1.0.1
    Tipos: zu (zum/zur), mit (mit dem/der), wo / wohin (im, in der / in den, ins, in die),
    verb (conjugación y verbo en 2.º lugar), haus (nach Hause / zu Hause), cual (¿Cuál frase está bien?),
    hor (escucha y elige), orden (ordena la frase), story (ordena el relato).
@@ -50,18 +50,18 @@
     ['Ich spiele ___ Sandkasten.', 'Sandkasten', 1], ['___ Park spiele ich.', 'Park', 1], ['Ich sehe viele Tiere ___ Zoo.', 'Zoo'],
     ['Ich kaufe Brot ___ Bäckerei.', 'Bäckerei'], ['Wir sind ___ Supermarkt.', 'Supermarkt'], ['Ich schwimme ___ Schwimmbad.', 'Schwimmbad'],
     ['Ich lese ___ Bibliothek.', 'Bibliothek'], ['Wir sehen einen Film ___ Kino.', 'Kino'], ['Ich lerne ___ Schule.', 'Schule'],
-    ['Mama kauft Medizin ___ Apotheke.', 'Apotheke'], ['Papa wartet ___ Bahnhof.', 'Bahnhof'], ['Die Bilder sind ___ Museum.', 'Museum']
+    ['Mama kauft Medikamente ___ Apotheke.', 'Apotheke'], ['Papa kauft eine Fahrkarte ___ Bahnhof.', 'Bahnhof'], ['Die Bilder sind ___ Museum.', 'Museum']
   ];
-  /* Opciones: nunca se ofrece la forma del mismo sustantivo que podría valer con otro sentido.
-     Wo?: dativo correcto + el otro dativo + acusativos que no valen (con das no se ofrece «ins»).
-     Wohin?: acusativo correcto + los otros acusativos + el dativo del OTRO género (nunca el dativo del mismo sustantivo). */
-  var WO_O = { der: ['im', 'in der', 'in den', 'ins'], das: ['im', 'in der', 'in den', 'in die'], die: ['in der', 'im', 'in die', 'ins'] };
+  /* v1.0.1 (N1): cada pregunta guarda TODAS las formas que son incorrectas en esa frase y la app muestra la correcta + 3 al azar
+     (show: 4), así el conjunto de opciones ya no delata la respuesta. Nunca se ofrece una forma que podría valer con otro sentido:
+     Wo?: con das no se ofrece «ins» (p. ej. «ins Schwimmbad»). Wohin?: nunca el dativo del mismo sustantivo («im Park» / «in der Schule»). */
+  var WO_O = { der: ['im', 'in der', 'in den', 'ins', 'in die'], das: ['im', 'in der', 'in den', 'in die'], die: ['in der', 'im', 'in den', 'ins', 'in die'] };
   var WOHIN_O = { der: ['in den', 'ins', 'in die', 'in der'], das: ['ins', 'in den', 'in die', 'in der'], die: ['in die', 'in den', 'ins', 'im'] };
   var IN_HELP = ' ¿Está quieto (Wo?) o va hacia allá (Wohin?)? Wo? → der/das: im · die: in der. Wohin? → der: in den · das: ins · die: in die.';
   WO.forEach(function (r, k) {
     var p = D.find(r[1]), a = D.wo(p), o = WO_O[p.g].slice();
     if (startsBlank(r[0])) { a = cap(a); o = o.map(cap); }
-    add({ id: 'wo-' + k, kind: 'mc', type: 'wo', topic: 'in', grp: p.n, src: !!r[2], fast: true, pic: p.i,
+    add({ id: 'wo-' + k, kind: 'mc', type: 'wo', topic: 'in', grp: p.n, src: !!r[2], fast: true, pic: p.i, show: 4,
       q: 'Completa la frase.', de: r[0], o: o, a: a, say: fill(r[0], a),
       help: p.n + ' = ' + p.es + '.' + IN_HELP,
       e: '<b>' + p.g + ' ' + p.n + '</b>. Aquí está quieto → Wo? → <b>' + a + ' ' + p.n + '</b>' + (p.g === 'die' ? '.' : ' (im = in + dem).') });
@@ -73,7 +73,7 @@
   ];
   WOHIN.forEach(function (r, k) {
     var p = D.find(r[1]), a = D.wohin(p);
-    add({ id: 'wohin-' + k, kind: 'mc', type: 'wohin', topic: 'in', grp: p.n, src: !!r[2], fast: true, pic: p.i,
+    add({ id: 'wohin-' + k, kind: 'mc', type: 'wohin', topic: 'in', grp: p.n, src: !!r[2], fast: true, pic: p.i, show: 4,
       q: 'Completa la frase.', de: r[0], o: WOHIN_O[p.g].slice(), a: a, say: fill(r[0], a),
       help: p.n + ' = ' + p.es + '.' + IN_HELP,
       e: '<b>' + p.g + ' ' + p.n + '</b>. Aquí va hacia allá → Wohin? → <b>' + a + ' ' + p.n + '</b>' + (a === 'ins' ? ' (ins = in + das).' : '.') });
@@ -159,7 +159,10 @@
     [['Ich', 'sehe', 'viele', 'Tiere'], null, 1],
     [['Ich', 'fahre', 'mit dem Bus', 'zur Bäckerei'], [['Ich', 'fahre', 'zur Bäckerei', 'mit dem Bus']], 1],
     [['Ich', 'kaufe', 'Brot', 'und', 'Kuchen'], [['Ich', 'kaufe', 'Kuchen', 'und', 'Brot']], 1],
-    [['Ich', 'fahre', 'mit dem Bus', 'zum Supermarkt', 'und', 'gehe', 'nach Hause'], [['Ich', 'fahre', 'zum Supermarkt', 'mit dem Bus', 'und', 'gehe', 'nach Hause']], 1],
+    [['Ich', 'fahre', 'mit dem Bus', 'zum Supermarkt', 'und', 'gehe', 'nach Hause'], [['Ich', 'fahre', 'zum Supermarkt', 'mit dem Bus', 'und', 'gehe', 'nach Hause'], ['Ich', 'gehe', 'nach Hause', 'und', 'fahre', 'mit dem Bus', 'zum Supermarkt'], ['Ich', 'gehe', 'nach Hause', 'und', 'fahre', 'zum Supermarkt', 'mit dem Bus'],
+      /* v1.0.1: también son frases correctas (otro significado, misma gramática; fahren con el bus, gehen a pie) */
+      ['Ich', 'fahre', 'mit dem Bus', 'nach Hause', 'und', 'gehe', 'zum Supermarkt'], ['Ich', 'fahre', 'nach Hause', 'mit dem Bus', 'und', 'gehe', 'zum Supermarkt'],
+      ['Ich', 'gehe', 'zum Supermarkt', 'und', 'fahre', 'mit dem Bus', 'nach Hause'], ['Ich', 'gehe', 'zum Supermarkt', 'und', 'fahre', 'nach Hause', 'mit dem Bus']], 1],
     [['Im Zoo', 'sehe', 'ich', 'viele Tiere'], null],
     [['Nach dem Zoo', 'fahre', 'ich', 'nach Hause'], null],
     [['In der Bäckerei', 'kaufe', 'ich', 'Brot'], null]
@@ -169,7 +172,7 @@
     add({ id: 'orden-' + k, kind: 'orden', type: 'orden', topic: 'satz', grp: 'orden-' + k, src: !!r[2], fast: false,
       q: 'Ordena la frase: toca las fichas en orden.', chunks: r[0], acc: acc, a: r[0], say: r[0].join(' ') + '.',
       help: 'La mayúscula indica el comienzo. El verbo va en 2.º lugar.',
-      e: '✔ <b>' + r[0].join(' ') + '.</b>' + (r[1] ? ' (También vale: ' + r[1].map(function (x) { return x.join(' ') + '.'; }).join(' / ') + ')' : '') + ' 💡 Verbo en 2.º lugar.' });
+      e: '✔ <b>' + r[0].join(' ') + '.</b>' + (r[1] ? ' (También vale' + (r[1].length > 1 ? ', por ejemplo: ' : ': ') + r[1].slice(0, 2).map(function (x) { return x.join(' ') + '.'; }).join(' / ') + (r[1].length > 2 ? ' y otros órdenes correctos' : '') + ')' : '') + ' 💡 Verbo en 2.º lugar.' });
   });
 
   /* ---- 9. Ordena el relato (dos partes; el orden se deduce del texto) ---- */

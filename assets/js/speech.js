@@ -1,6 +1,6 @@
 /**
  * Optional German speechSynthesis. User gesture required. Cancel on navigation/next.
- * Copiado de der·die·das Orte 1.0.1 (sin reconocimiento de voz). Solo voces alemanas; sin voz alemana no habla y avisa (onNoVoice) después de esperar a que carguen las voces. v1.0.0 (Mein Tag in der Stadt)
+ * Copiado de der·die·das Orte 1.0.1 (sin reconocimiento de voz). Solo voces alemanas; sin voz alemana no habla y avisa (onNoVoice) después de esperar a que carguen las voces. v1.0.1 (Mein Tag in der Stadt; sin cambios de lógica desde 1.0.0)
  */
 (function (global) {
   'use strict';

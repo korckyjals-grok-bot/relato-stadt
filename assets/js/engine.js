@@ -1,4 +1,4 @@
-/* Mein Tag in der Stadt — lógica pura (sin DOM): puntaje, marca verde, selección sin repetir. v1.0.0 */
+/* Mein Tag in der Stadt — lógica pura (sin DOM): puntaje, marca verde, selección sin repetir. v1.0.1 */
 (function (g) {
   'use strict';
   var CK = 'aleman_check_relato', BK = 'relato_best', TOPICS = ['zu', 'mit', 'in', 'satz'];
@@ -50,5 +50,11 @@
     do { s = shuffle(it.chunks, rng); tries++; } while (it.acc.indexOf(s.join(' ')) >= 0 && tries < 50);
     return s;
   }
-  g.RELATO_ENGINE = { CK: CK, BK: BK, TOPICS: TOPICS, qualifies: qualifies, getChecks: getChecks, applyChallenge: applyChallenge, pool: pool, isRight: isRight, rightOf: rightOf, makePicker: makePicker, shuffle: shuffle, shuffleChunks: shuffleChunks };
+  /* v1.0.1 (N1): opciones visibles. Si el ítem tiene show, se muestran la correcta + (show-1) incorrectas al azar; siempre en orden al azar */
+  function optionsFor(it, rng) {
+    var o = it.o;
+    if (it.show && o.length > it.show) o = [it.a].concat(shuffle(o.filter(function (x) { return x !== it.a; }), rng).slice(0, it.show - 1));
+    return shuffle(o, rng);
+  }
+  g.RELATO_ENGINE = { CK: CK, BK: BK, TOPICS: TOPICS, qualifies: qualifies, getChecks: getChecks, applyChallenge: applyChallenge, pool: pool, isRight: isRight, rightOf: rightOf, makePicker: makePicker, shuffle: shuffle, shuffleChunks: shuffleChunks, optionsFor: optionsFor };
 })(typeof window !== 'undefined' ? window : globalThis);

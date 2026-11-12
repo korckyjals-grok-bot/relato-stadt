@@ -1,4 +1,4 @@
-/* Mein Tag in der Stadt — contenido. v1.0.0
+/* Mein Tag in der Stadt — contenido. v1.0.1
    Fuente: hoja de la clase «relato del día en la ciudad» (7 frases), corregida (ver README).
    Vocabulario extra: lugares y medios de transporte de «In der Stadt unterwegs». */
 (function (g) {
@@ -42,14 +42,14 @@
     { n: 'Zug', g: 'der', i: '🚆', es: 'el tren' },
     { n: 'Auto', g: 'das', i: '🚗', es: 'el carro' },
     { n: 'Fahrrad', g: 'das', i: '🚲', es: 'la bicicleta' },
-    { n: 'Roller', g: 'der', i: '🛴', es: 'la patineta' },
+    { n: 'Roller', g: 'der', i: '🛴', es: 'la patineta de pie (con manubrio)' },
     { n: 'U-Bahn', g: 'die', i: '🚇', es: 'el metro' },
     { n: 'Straßenbahn', g: 'die', i: '🚋', es: 'el tranvía' }
   ];
   /* Tarjetas de Estudiar por tema. f = frente, b = ejemplo alemán (HTML), es = ayuda, say = texto para la voz */
   var CARDS = {
     zu: [
-      { f: 'zu + Dativ', b: '<b>der</b> → zu + dem = <b>zum</b><br><b>das</b> → zu + dem = <b>zum</b><br><b>die</b> → zu + der = <b>zur</b>', es: '¿A dónde voy? Después de zu siempre va dativo.', say: 'zum, zum, zur' },
+      { f: 'zu + Dativ', b: '<b>der</b> → zu + dem = <b>zum</b><br><b>das</b> → zu + dem = <b>zum</b><br><b>die</b> → zu + der = <b>zur</b>', es: '¿A dónde voy? Después de zu siempre va dativo: zum / zur. (Con «in» es distinto: mira la tarjeta Wo? / Wohin?)', say: 'zum, zum, zur' },
       { f: '🌳 der Park → zum Park', b: 'Ich gehe <b>zum</b> Park.', es: 'Voy al parque.', say: 'Ich gehe zum Park.' },
       { f: '🛒 der Supermarkt → zum Supermarkt', b: 'Ich fahre mit dem Bus <b>zum</b> Supermarkt.', es: 'Voy en bus al supermercado.', say: 'Ich fahre mit dem Bus zum Supermarkt.' },
       { f: '🥐 die Bäckerei → zur Bäckerei', b: 'Ich fahre mit dem Bus <b>zur</b> Bäckerei.', es: 'Voy en bus a la panadería.', say: 'Ich fahre mit dem Bus zur Bäckerei.' },
@@ -66,7 +66,7 @@
     ],
     in: [
       { f: '📍 Wo? → im / in der', b: 'Ich spiele <b>im</b> Sandkasten.<br>Ich lerne <b>in der</b> Schule.', es: '¿Dónde estoy? (quieto) → dativo. im = in + dem.', say: 'Ich spiele im Sandkasten. Ich lerne in der Schule.' },
-      { f: '➡️ Wohin? → in den / ins / in die', b: 'Ich fahre <b>in den</b> Zoo.<br>Wir gehen <b>ins</b> Kino.<br>Ich gehe <b>in die</b> Schule.', es: '¿A dónde voy? (me muevo) → acusativo. ins = in + das.', say: 'Ich fahre in den Zoo. Wir gehen ins Kino. Ich gehe in die Schule.' },
+      { f: '➡️ Wohin? → in den / ins / in die', b: 'Ich fahre <b>in den</b> Zoo.<br>Wir gehen <b>ins</b> Kino.<br>Ich gehe <b>in die</b> Schule.', es: '¿A dónde voy? (me muevo) → con «in» va acusativo: in den / ins / in die. ins = in + das. Ojo: con «zu» siempre es zum / zur. Las dos frases están bien: Ich gehe zum Park · Ich gehe in den Park.', say: 'Ich fahre in den Zoo. Wir gehen ins Kino. Ich gehe in die Schule.' },
       { f: '🏖️ im Park · im Sandkasten', b: '<b>Im</b> Park spiele ich <b>im</b> Sandkasten.', es: 'En el parque juego en el arenero. Se escribe «im» (o «in dem», separado). «indem» junto es otra palabra.', say: 'Im Park spiele ich im Sandkasten.' },
       { f: '🦁 der Zoo → in den Zoo', b: 'Ich fahre mit dem Taxi <b>in den</b> Zoo.<br>Im Zoo sehe ich viele Tiere.', es: 'Voy al zoológico (Wohin?) · En el zoológico veo animales (Wo?).', say: 'Ich fahre mit dem Taxi in den Zoo. Im Zoo sehe ich viele Tiere.' },
       { f: '📋 Tabla', b: 'der → Wo? <b>im</b> · Wohin? <b>in den</b><br>das → Wo? <b>im</b> · Wohin? <b>ins</b><br>die → Wo? <b>in der</b> · Wohin? <b>in die</b>', es: 'Memoriza la tabla.', say: 'im, in den. im, ins. in der, in die.' }
@@ -87,7 +87,7 @@
     { de: 'der Zoo', es: 'sustantivo: solo la primera letra mayúscula.' },
     { de: 'mit dem Taxi', es: 'después de mit va el artículo: mit dem.' }
   ];
-  var D = { STORY: STORY, PLACES: PLACES, VEHICLES: VEHICLES, CARDS: CARDS, WRITE: WRITE, VERSION: '1.0.0' };
+  var D = { STORY: STORY, PLACES: PLACES, VEHICLES: VEHICLES, CARDS: CARDS, WRITE: WRITE, VERSION: '1.0.1' };
   D.find = function (n) { var L = PLACES.concat(VEHICLES); for (var i = 0; i < L.length; i++) if (L[i].n === n) return L[i]; return null; };
   D.zu = function (p) { return p.g === 'die' ? 'zur' : 'zum'; };
   D.mit = function (p) { return p.g === 'die' ? 'mit der' : 'mit dem'; };
